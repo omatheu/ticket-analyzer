@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  support-ticket-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    container_name: support-ticket-analyzer
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      # Optional: Mount the data file for easy updates
+      - ./public/zendesk_mock_tickets_llm_flavor.json:/app/public/zendesk_mock_tickets_llm_flavor.json:ro
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/tickets"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s 

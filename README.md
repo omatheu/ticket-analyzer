@@ -2,6 +2,29 @@
 
 An AI-powered full-stack application for categorizing and analyzing support tickets to help support managers make better decisions about which issues to escalate to engineering.
 
+## 🐳 Quick Start with Docker
+
+### **Option 1: Docker Compose (Recommended)**
+```bash
+# Build and start the application
+docker-compose up --build
+
+# Access at: http://localhost:3000
+```
+
+### **Option 2: Direct Docker Commands**
+```bash
+# Build the image
+docker build -t support-ticket-analyzer:latest .
+
+# Run the container
+docker run --rm -p 3000:3000 support-ticket-analyzer:latest
+
+# Access at: http://localhost:3000
+```
+
+📖 **For detailed Docker instructions, see [DOCKER.md](./DOCKER.md)**
+
 ## Features
 
 ### 🎯 **Automatic Ticket Categorization**
@@ -48,43 +71,38 @@ The system automatically categorizes tickets into these areas:
 - **Backend**: Next.js API routes with server-side processing
 - **Data Processing**: Intelligent keyword-based categorization algorithms
 - **UI/UX**: Modern, responsive design with accessibility features
+- **Containerization**: Docker with multi-stage builds and Alpine Linux
 
 ## Getting Started
 
-### How to run with Docker:
-
-```bash
-docker build -t support-ticket-analyzer:latest .
-```
-
-```bash
-docker run --rm -p 3000:3000 --name support-ticket-analyzer support-ticket-analyzer:latest
-```
-
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18+ (for local development)
+- Docker (for containerized deployment)
 - npm or yarn
 
-### Installation
+### Option 1: Docker Deployment (Recommended)
+```bash
+# Clone and run with Docker
+git clone <repository-url>
+cd support-ticket-analyzer
+docker-compose up --build
+```
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd support-ticket-analyzer
-   ```
+### Option 2: Local Development
+```bash
+# Clone the repository
+git clone <repository-url>
+cd support-ticket-analyzer
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# Install dependencies
+npm install
 
-3. **Start the development server**
-   ```bash
-   npm run dev
-   ```
+# Start the development server
+npm run dev
 
-4. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+# Open your browser
+# Navigate to [http://localhost:3000](http://localhost:3000)
+```
 
 ### Data Setup
 
@@ -159,6 +177,26 @@ Returns categorized and filtered ticket data with statistics.
 }
 ```
 
+## Deployment
+
+### Docker Production
+```bash
+# Build production image
+docker build -t support-ticket-analyzer:latest .
+
+# Run with restart policy
+docker run -d --restart=unless-stopped -p 3000:3000 support-ticket-analyzer:latest
+```
+
+### Docker Compose Production
+```bash
+# Start with restart policy
+docker-compose -f docker-compose.yml up -d
+
+# Scale if needed
+docker-compose up --scale support-ticket-analyzer=3
+```
+
 ## Contributing
 
 1. Fork the repository
@@ -177,4 +215,6 @@ For questions or support, please open an issue in the repository or contact the 
 
 ---
 
-**Built with ❤️ using Next.js and modern web technologies**
+**Built with ❤️ using Next.js, Docker, and modern web technologies**
+
+**🐳 Ready to deploy?** Start with `docker-compose up --build` and access your application at http://localhost:3000!
