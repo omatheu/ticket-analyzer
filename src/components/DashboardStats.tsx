@@ -1,5 +1,4 @@
 import { TicketStats } from '../types/ticket';
-import { getCategoryById } from '../utils/ticketAnalyzer';
 
 interface DashboardStatsProps {
   stats: TicketStats;

@@ -1,14 +1,16 @@
 import { TicketCategory } from '../types/ticket';
 
+interface Filters {
+  category: string;
+  priority: string;
+  sentiment: string;
+  escalated: boolean | undefined;
+  search: string;
+}
+
 interface FilterPanelProps {
-  filters: {
-    category: string;
-    priority: string;
-    sentiment: string;
-    escalated: boolean | undefined;
-    search: string;
-  };
-  onFilterChange: (filters: Partial<typeof filters>) => void;
+  filters: Filters;
+  onFilterChange: (filters: Partial<Filters>) => void;
   categories: TicketCategory[];
 }
 

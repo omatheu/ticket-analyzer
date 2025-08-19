@@ -1,13 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { CategorizedTicket, TicketStats, TicketCategory } from '../types/ticket';
+import { useState, useEffect, useCallback } from 'react';
+import { CategorizedTicket, TicketStats } from '../types/ticket';
 import { TICKET_CATEGORIES, getCategoryById } from '../utils/ticketAnalyzer';
 import TicketList from '../components/TicketList';
 import DashboardStats from '../components/DashboardStats';
 import FilterPanel from '../components/FilterPanel';
-import PriorityChart from '../components/PriorityChart';
-import CategoryChart from '../components/CategoryChart';
+import EnhancedCharts from '../components/EnhancedCharts';
 
 export default function Home() {
   const [tickets, setTickets] = useState<CategorizedTicket[]>([]);
@@ -22,11 +21,7 @@ export default function Home() {
     search: ''
   });
 
-  useEffect(() => {
-    fetchTickets();
-  }, [filters]);
-
-  const fetchTickets = async () => {
+  const fetchTickets = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -48,7 +43,11 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchTickets();
+  }, [fetchTickets]);
 
   const handleFilterChange = (newFilters: Partial<typeof filters>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
@@ -110,7 +109,7 @@ export default function Home() {
           <div className="flex justify-between items-center py-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Support Ticket Analyzer</h1>
-              <p className="text-gray-600 mt-1">Analyze and categorize support tickets for better decision making</p>
+              <p className="text-gray-600 mt-1">AI-powered ticket categorization and analysis for better decision making</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
@@ -130,17 +129,16 @@ export default function Home() {
         {/* Dashboard Overview */}
         {stats && <DashboardStats stats={stats} />}
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Priority Distribution</h3>
-            <PriorityChart priorities={stats?.priorities || {}} />
+        {/* Enhanced Charts Section */}
+        {stats && (
+          <div className="mb-8">
+            <EnhancedCharts 
+              categories={stats.categories}
+              priorities={stats.priorities}
+              sentiments={stats.sentiments}
+            />
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Category Distribution</h3>
-            <CategoryChart categories={stats?.categories || {}} />
-          </div>
-        </div>
+        )}
 
         {/* Filters and Ticket List */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { TicketData } from '../../../types/ticket';
 import { analyzeTickets, categorizeTicket, filterTickets } from '../../../utils/ticketAnalyzer';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export async function GET(request: NextRequest) {
   try {
-    // Read the ticket data from the public file
-    const ticketData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/zendesk_mock_tickets_llm_flavor.json`);
-    const tickets: TicketData = await ticketData.json();
+    // Read the ticket data directly from the file system
+    const filePath = join(process.cwd(), 'public', 'zendesk_mock_tickets_llm_flavor.json');
+    const fileContent = readFileSync(filePath, 'utf-8');
+    const tickets: TicketData = JSON.parse(fileContent);
     
     // Get query parameters for filtering
     const { searchParams } = new URL(request.url);
